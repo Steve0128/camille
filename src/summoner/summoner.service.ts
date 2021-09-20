@@ -16,7 +16,7 @@ export class SummonerService {
 
   findSummonerByUsername(username: string) {
     const usernameURI = encodeURIComponent(username);
-    this.summonerModel.findOne({ username: username });
+    this.summonerModel.findOne({ username: username }).exec();
     return this.httpService
       .get(
         `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${usernameURI}?api_key=`,
