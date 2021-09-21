@@ -19,7 +19,7 @@ export class SummonerService {
     this.summonerModel.findOne({ username: username }).exec();
     return this.httpService
       .get(
-        `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${usernameURI}?api_key=`,
+        `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${usernameURI}?api_key=${process.env.API_KEY}`,
       )
       .pipe(map((res) => res.data));
   }
