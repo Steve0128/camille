@@ -1,8 +1,8 @@
 export interface Summoner {
-  _id: string;
+  id: string;
   accountId: string;
   puuid: string;
-  username: string;
+  name: string;
   profileIconId: string;
   revisionDate: string;
   summonerLevel: number;
