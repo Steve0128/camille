@@ -7,7 +7,7 @@ export class Match {
 
 enum GameModes {}
 
-class MatchPlayer {
+export class MatchPlayer {
   summonerName: string;
   puuid: string;
   summonerId: string;
@@ -36,6 +36,7 @@ class MatchPlayer {
   visionScore: number;
   wardsPlaced: number;
   wardsKilled: number;
+  win: boolean;
 }
 
 class PrimaryRunes {
