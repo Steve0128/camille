@@ -1,8 +1,10 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
+import { forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ChampionService } from 'src/champion/champion.service';
+import { MatchService } from 'src/match/match.service';
 import { Summoner } from './summoner.interface';
 import { SummonerRepository } from './summoner.repository';
 
@@ -12,9 +14,8 @@ export class SummonerService {
     private readonly summonerRepository: SummonerRepository,
     private championService: ChampionService,
     private httpService: HttpService,
+    private matchService: MatchService,
   ) {}
-  private readonly summoner: Summoner[] = [];
-  private readonly finalJson: any = [];
 
   //TODO: Handle the case where summoner is already in the DB
   findSummonerByUsername(username: string) {
@@ -35,7 +36,7 @@ export class SummonerService {
     return user;
   }
   //TODO: Add summoner name to response, also handle the case where summoner is not already in the db
-  async getChampionMastery(username: string, champion: string) {
+  async findChampionMastery(username: string, champion: string) {
     const user = await this.summonerRepository.findSummoner(username);
     return this.championService
       .getChampionId(champion)
@@ -49,17 +50,25 @@ export class SummonerService {
         ),
       );
   }
-  async getSummonerMatchHistory(username: string) {
+  //TODO Let caller choose between 1-20 matches
+  //TODO If you make too many requests axios gives error 429. Build custom http client to prevent this. For now, let's request 5
+  async findSummonerMatchHistory(username: string) {
     const user = await this.summonerRepository.findSummoner(username);
     // console.log(puuid);
     return this.httpService
       .get(
-        `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${user.puuid}/ids?start=0&count=20&api_key=${process.env.API_KEY}`,
+        `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${user.puuid}/ids?start=0&count=5&api_key=${process.env.API_KEY}`,
       )
       .pipe(
-        map((res: AxiosResponse) => {
-          return res.data;
-        }),
+        switchMap((res: AxiosResponse) =>
+          forkJoin(
+            res.data.map((match) =>
+              this.matchService
+                .getMatchFromId(match)
+                .pipe(map((match) => match)),
+            ),
+          ),
+        ),
       );
     //this.summonerRepository.registerSummoner;
   }

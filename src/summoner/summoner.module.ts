@@ -6,6 +6,7 @@ import { SummonerSchema } from './summoner.schema';
 import { HttpModule } from '@nestjs/axios';
 import { SummonerRepository } from './summoner.repository';
 import { ChampionService } from 'src/champion/champion.service';
+import { MatchService } from 'src/match/match.service';
 
 @Module({
   imports: [
@@ -17,7 +18,12 @@ import { ChampionService } from 'src/champion/champion.service';
     MongooseModule.forFeature([{ name: 'Summoners', schema: SummonerSchema }]),
   ],
   controllers: [SummonerController],
-  providers: [ChampionService, SummonerService, SummonerRepository],
+  providers: [
+    ChampionService,
+    SummonerService,
+    SummonerRepository,
+    MatchService,
+  ],
   exports: [SummonerService],
 })
 export class SummonerModule {}
