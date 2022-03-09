@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SummonerService } from './summoner.service';
 import { SummonerController } from './summoner.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { SummonerSchema } from './summoner.schema';
+
 import { HttpModule } from '@nestjs/axios';
+import { SummonerRepository } from './summoner.repository';
+import { ChampionService } from 'src/champion/champion.service';
+import { MatchService } from 'src/match/match.service';
 
 @Module({
   imports: [
@@ -12,10 +14,14 @@ import { HttpModule } from '@nestjs/axios';
         timeout: 5000,
       }),
     }),
-    MongooseModule.forFeature([{ name: 'Summoners', schema: SummonerSchema }]),
   ],
   controllers: [SummonerController],
-  providers: [SummonerService],
+  providers: [
+    ChampionService,
+    SummonerService,
+    SummonerRepository,
+    MatchService,
+  ],
   exports: [SummonerService],
 })
 export class SummonerModule {}
