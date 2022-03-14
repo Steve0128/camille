@@ -47,13 +47,16 @@ export class SummonerService {
         ),
       );
   }
+  async findAllChampionMastery(username: string) {
+    
+  }
   //TODO Let caller choose between 1-20 matches
   //TODO If you make too many requests axios gives error 429. Build custom http client to prevent this. For now, let's request 5
   async findSummonerMatchHistory(username: string) {
     const summoner: Summoner = await lastValueFrom(this.findSummonerByUsername(username));
     return this.httpService
       .get(
-        `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${summoner.puuid}/ids?start=0&count=100&api_key=${process.env.API_KEY}`,
+        `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${summoner.puuid}/ids?start=0&count=5&api_key=${process.env.API_KEY}`,
       )
       .pipe(
         switchMap((res: AxiosResponse) =>
