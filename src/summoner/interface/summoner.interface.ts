@@ -1,10 +1,11 @@
 export interface Summoner {
   id: string;
-  accountId: string;
-  puuid: string;
-  name: string;
-  profileIconId: string;
-  revisionDate: string;
+  summonerName: string;
+  riotId: string;
+  riotAccountId: string;
+  riotPuuid: string;
+  profileIconId: number;
+  lastUpdatedDate: string;
   summonerLevel: number;
 }
 

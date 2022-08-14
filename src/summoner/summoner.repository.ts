@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
+import { Summoner} from './summoner.entity';
 
-import { Summoner } from './summoner.interface';
-
-@Injectable()
-export class SummonerRepository {
+@EntityRepository(Summoner)
+export class SummonerRepository extends Repository<Summoner> {
 
 }

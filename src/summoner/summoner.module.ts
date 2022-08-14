@@ -6,6 +6,8 @@ import { HttpModule } from '@nestjs/axios';
 import { SummonerRepository } from './summoner.repository';
 import { ChampionService } from 'src/champion/champion.service';
 import { MatchService } from 'src/match/match.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Summoner } from './summoner.entity';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { MatchService } from 'src/match/match.service';
         timeout: 5000,
       }),
     }),
+    TypeOrmModule.forFeature([Summoner])
   ],
   controllers: [SummonerController],
   providers: [
